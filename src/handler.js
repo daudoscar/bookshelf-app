@@ -85,7 +85,7 @@ const getBooksHandler = (request, h) => {
     if (finished) {
         searchFilter = searchFilter.filter(book => book.finished === (finished == '1'));
     }
-    
+
     const filteredBooks = searchFilter.map(book => ({
         id: book.id,
         name: book.name,
