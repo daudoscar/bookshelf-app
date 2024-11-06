@@ -3,6 +3,7 @@ const books = require('./books')
 
 /**
  * Metode penambahan buku kepada database.
+ * 
  * @param {Object} request - Request body yang mengandung data buku pada payload.
  * @param {Object} request.payload - Request payload yang mengandung data-data object buku.
  * @param {string} request.payload.name - Nama buku.
@@ -57,6 +58,7 @@ const insertBookHandler = (request, h) => {
 
 /**
  * Metode mengambil semua buku yang terdapat pada database dengan parameter opsional.
+ * 
  * @param {Object} request - Request parameter yang mengandung data buku opsional.
  * @param {Object} request.params - Request parameter dari URL yang mengandung searchingopsional.
  * @param {Object} request.params.name - Searching opsional nama buku.
@@ -79,11 +81,11 @@ const getBooksHandler = (request, h) => {
     }
 
     if (reading) {
-        searchFilter = searchFilter.filter(book => book.reading === (reading == '1'));
+        searchFilter = searchFilter.filter(book => book.reading == (reading == '1'));
     }
 
     if (finished) {
-        searchFilter = searchFilter.filter(book => book.finished === (finished == '1'));
+        searchFilter = searchFilter.filter(book => book.finished == (finished == '1'));
     }
 
     const filteredBooks = searchFilter.map(book => ({
