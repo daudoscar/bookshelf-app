@@ -56,21 +56,46 @@ const insertBookHandler = (request, h) => {
 };
 
 /**
- * Metode mengambil semua buku yang terdapat pada database.
- *
+ * Metode mengambil semua buku yang terdapat pada database dengan parameter opsional.
+ * @param {Object} request - Request parameter yang mengandung data buku opsional.
+ * @param {Object} request.params - Request parameter dari URL yang mengandung searchingopsional.
+ * @param {Object} request.params.name - Searching opsional nama buku.
+ * @param {Object} request.params.reading - Searching opsional status pembacaan buku.
+ * @param {Object} request.params.finished - Searching opsional status pembacaan buku.
+
  * @param {Object} h - Respons toolkit HAPI.
  * 
  * @returns {Object} - Respons berisi status dan data buku: `id`, `name`, dan `publisher`.
  */
-const getBooksHandler = (h) => {
+const getBooksHandler = (request, h) => {
+    const { name, reading, finished } = request.query;
+
+    let searchFilter = books;
+
+    if (name) {
+        searchFilter = searchFilter.filter(book =>
+            book.name.toLowerCase().includes(name.toLowerCase())
+        );
+    }
+
+    if (reading) {
+        searchFilter = searchFilter.filter(book => book.reading === (reading == '1'));
+    }
+
+    if (finished) {
+        searchFilter = searchFilter.filter(book => book.finished === (finished == '1'));
+    }
+    
+    const filteredBooks = searchFilter.map(book => ({
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+    }));
+
     return h.response({
         status: 'success',
         data: {
-            books: books.map(book => ({
-                id: book.id,
-                name: book.name,
-                publisher: book.publisher,
-            })),
+            books: filteredBooks,
         },
     });
 };
